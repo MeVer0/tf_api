@@ -44,7 +44,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, IntegerIDMixin]):
         MS.send_mail(
             destination=user.email,
             subject="Перейдите по ссылке, чтобы завершить регистрацию!",
-            content=f""""Ваш токен: http://127.0.0.1:8000/auth/verify/{token}
+            content=f""""Ваш токен: http://127.0.0.1:8000/auth/verify?token={token}
                          """
 
         )

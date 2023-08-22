@@ -41,3 +41,10 @@ class DicDatabase(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
+
+
+class DicProgramLang(Base):
+    __tablename__ = "dic_program_lang"
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(String(50), nullable=False, unique=True)
