@@ -18,5 +18,13 @@ class CreatePortfolio(BaseModel):
     knowledge_field: list
 
 
+class GetPortfolio(BaseModel):
+    kr: int
+    user_id: int
+    database_id: str
+    knowledge_field_id: str
+    program_lang_id: str
+
+
 class EditPortfolio(CreatePortfolio):
     portfolio_id: int

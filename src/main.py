@@ -6,7 +6,8 @@ from src.auth.manager import fastapi_users
 from src.auth.schemas import UserRead, UserCreate
 from src.auth.manager import auth_backend
 
-from src.portfolio.router import router as portfolio_router
+from catalog.router import router as catalog_router
+from course.router import router as course_router
 
 
 app = FastAPI()
@@ -38,9 +39,8 @@ app.include_router(
     tags=["auth"],
 )
 
-
-app.include_router(portfolio_router)
-
+app.include_router(catalog_router)
+app.include_router(course_router)
 
 if __name__ == "__main__":
     uvicorn.run(host="localhost", app=app)

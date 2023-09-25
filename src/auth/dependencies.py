@@ -5,5 +5,8 @@ from src.models import User
 
 
 def get_current_user_id(user: User = Depends(fastapi_users.current_user())):
-    user_id = user.id
+    if user.id:
+        user_id = user.id
+    else:
+        user_id = None
     return user_id

@@ -1,9 +1,7 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Double, UniqueConstraint
 from sqlalchemy.orm import relationship, DeclarativeBase
 
 from src.database import Base
-from src.portfolio.models import Portfolio
-from src.project.models import Project
 
 
 class User(Base):
@@ -16,35 +14,48 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
     is_verified = Column(Boolean, default=False)
-
-    portfolio = relationship("Portfolio")
-    project = relationship("Project")
+    is_author = Column(Boolean, default=False)
 
 
-# Таблицы справочнки
-class DicKnowledgeField(Base):
-    __tablename__ = "dic_knowledge_field"
+class Course(Base):
+    __tablename__ = "course"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(100), nullable=False, unique=True)
-
-
-class DicWorkSchedule(Base):
-    __tablename__ = "dic_work_schedule"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(100), nullable=False, unique=True)
+    id = Column(Integer, primary_key=True)
+    logo = Column(String)
+    author_id = Column(Integer, nullable=False)
+    name = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    price = Column(Double, nullable=False)
 
 
-class DicDatabase(Base):
-    __tablename__ = "dic_database"
+class CourseModule(Base):
+    __tablename__ = "course_module"
 
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
+    id = Column(Integer, primary_key=True)
+    course_id = Column(Integer, ForeignKey("course.id"), nullable=False,)
+    name = Column(String, nullable=False)
+
+    f_key_course = relationship('Course')
 
 
-class DicProgramLang(Base):
-    __tablename__ = "dic_program_lang"
+class CourseStep(Base):
+    __tablename__ = "course_step"
 
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
+    id = Column(Integer, primary_key=True)
+    course_id = Column(Integer, nullable=False)
+    module_id = Column(Integer, ForeignKey("course_module.id"), nullable=False)
+    video = Column(String, nullable=False)
+    image = Column(String, default=True)
+    text = Column(String, default=True)
+
+    f_key_module = relationship('CourseModule')
+
+
+class UserCourse(Base):
+    __tablename__ = "user_course"
+
+    user_id = Column(Integer)
+    course_id = Column(Integer, primary_key=True)
+    type_id = Column(Integer, primary_key=True)
+
+    __table_args__ = (UniqueConstraint('user_id', 'course_id', name='user_id_course_id'), )
